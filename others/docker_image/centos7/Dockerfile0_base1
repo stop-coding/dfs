@@ -1,0 +1,18 @@
+FROM centos:7
+
+#0 安装基础工具，该镜像全部只能通过yum install安装
+RUN yum install -y openssl &&\
+	yum install -y libunistring-devel &&\
+	yum install -y net-tools  &&\
+	yum install -y numactl &&\
+	yum install -y  boost  &&\
+	yum install -y expect&&\
+	yum install -y gpgme-devel jansson-devel \
+	  keyutils-libs-devel krb5-workstation libacl-devel libaio-devel \
+	  libarchive-devel libattr-devel libblkid-devel libtasn1 libtasn1-tools \
+	  libxslt openldap-devel pam-devel popt-devel \
+	  readline-devel rpcgen systemd-devel \
+	  zlib-devel &&\
+    yum install -y numactl-devel
+
+WORKDIR /home

@@ -1,0 +1,14 @@
+FROM ca_build_etcd:v0.0.1
+
+WORKDIR /tmp/build
+COPY ./src /tmp/build
+
+#0 编译cafs
+RUN source scl_source enable devtoolset-8 &&\
+	chmod +x build_cafs.sh &&\
+	mkdir /tmp/build/cafs &&\
+	mv /tmp/build/ca.tar.gz /tmp/build/cafs &&\
+	/tmp/build/build_cafs.sh /tmp/build/cafs &&\
+	rm -rf /tmp/build
+
+WORKDIR /home

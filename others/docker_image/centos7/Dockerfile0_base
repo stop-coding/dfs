@@ -1,0 +1,32 @@
+FROM centos:7
+
+#0 安装基础工具，该镜像全部只能通过yum install安装
+RUN yum install -y make &&\
+    yum install -y wget &&\
+    yum install -y openssl &&\
+    yum install -y openssl-devel &&\
+    yum install -y autoconf &&\
+    yum install -y automake &&\
+	yum install -y gcc &&\
+    yum install -y gcc-c++ &&\
+    yum install -y centos-release-scl &&\
+    yum install -y devtoolset-7-gcc* &&\
+	yum install -y devtoolset-8-toolchain &&\
+	yum install -y texinfo &&\
+	yum install -y libunistring-devel &&\
+	yum install -y libffi-devel zlib1g-dev &&\
+    yum install -y zlib* &&\
+	yum install -y libtool  &&\
+	yum install -y patch  &&\
+	yum install -y numactl &&\
+	yum install -y net-tools  &&\
+	yum install -y expect  &&\
+	yum install -y docbook-style-xsl gcc gdb gpgme-devel jansson-devel \
+	  keyutils-libs-devel krb5-workstation libacl-devel libaio-devel \
+	  libarchive-devel libattr-devel libblkid-devel libtasn1 libtasn1-tools \
+	  libxml2-devel libxslt lmdb-devel openldap-devel pam-devel perl \
+	  perl-ExtUtils-MakeMaker perl-Parse-Yapp popt-devel python3-cryptography \
+	  python3-dns python3-gpg python36-devel readline-devel rpcgen systemd-devel \
+	  tar zlib-devel &&\
+    yum install -y numactl-devel
+

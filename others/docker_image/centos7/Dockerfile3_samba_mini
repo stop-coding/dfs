@@ -1,0 +1,33 @@
+FROM cafs_build:v0.0.3 AS cafs
+
+WORKDIR /
+RUN echo "nothing to"
+
+FROM samba_build:v0.0.3 AS samba
+
+WORKDIR /
+RUN echo "nothing to"
+
+FROM samba_base:v0.0.1
+COPY --from=cafs /usr/local/ /usr/local/
+COPY --from=cafs /etc/cafs/ /etc/cafs/
+COPY --from=cafs /etc/ld.so.conf.d/ /etc/ld.so.conf.d/
+COPY --from=cafs /usr/include/cafs/  /usr/include/cafs/
+
+COPY --from=samba /etc/samba/ /etc/samba/
+COPY --from=samba /usr/local/samba/ /usr/local/samba/
+COPY ./src/run_samba.sh /home/run_samba.sh
+COPY ./src/set_samba_pwd.sh /home/set_samba_pwd.sh
+
+ENV export PKG_CONFIG_PATH="/usr/lib64/pkgconfig/:/usr/local/lib/pkgconfig/:/usr/local/lib64/pkgconfig"
+RUN chmod +x /home/run_samba.sh &&\
+	ln -s  /usr/local/samba/sbin/smbd /usr/sbin/smbd &&\
+	ln -s  /usr/local/samba/sbin/nmbd /usr/sbin/nmbd &&\
+	ln -s  /usr/local/samba/bin/smbstatus /usr/bin/smbstatus &&\
+	ln -s  /usr/local/samba/bin/smbpasswd /usr/bin/smbpasswd &&\
+	ln -s  /usr/local/samba/bin/smbclient /usr/bin/smbclient &&\
+	chmod +x /home/*.sh	&&\
+	ldconfig
+
+WORKDIR /home
+

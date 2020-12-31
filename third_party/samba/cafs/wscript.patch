@@ -1,0 +1,52 @@
+--- samba-4.12.6/source3/wscript	2020-02-28 16:59:35.000000000 +0800
++++ wscript	2020-10-13 03:20:15.247296702 +0800
+@@ -70,9 +70,15 @@
+     opt.add_option('--with-libcephfs',
+                    help=("Directory under which libcephfs is installed"),
+                    action="store", dest='libcephfs_dir', default=None)
++    # cafs!!!!
++    opt.add_option('--with-libcafs',
++                   help=("Directory under which libcafs is installed"),
++                   action="store", dest='libcafs_dir', default=None)
+ 
+     opt.samba_add_onoff_option('glusterfs', with_name="enable", without_name="disable", default=True)
+     opt.samba_add_onoff_option('cephfs', with_name="enable", without_name="disable", default=True)
++    # cafs!!!!
++    opt.samba_add_onoff_option('cafs', with_name="enable", without_name="disable", default=False)
+ 
+     opt.add_option('--enable-vxfs',
+                   help=("enable support for VxFS (default=no)"),
+@@ -1707,6 +1713,23 @@
+         Logs.error('''--with-libcephfs no longer supported, please use compiler
+                    flags instead, e.g. GCC LIBRARY_PATH and C_INCLUDE_PATH''')
+         sys.exit(1)
++    # cafs!!!!
++    if Options.options.libcafs_dir:
++        Logs.error('''--with-libcafs no longer supported, please use compiler
++                   flags instead, e.g. GCC LIBRARY_PATH and C_INCLUDE_PATH''')
++        sys.exit(1)
++    # cafs!!!!
++    if (Options.options.with_cafs and
++        conf.CHECK_HEADERS('cafs/libcafs.h', False, False, 'cafs') and
++        conf.CHECK_LIB('cafs', shlib=True) and conf.CHECK_LIB('arpc', shlib=True)
++        and conf.CHECK_LIB('fsmsg', shlib=True) and conf.CHECK_LIB('numa', shlib=True)):
++        if (Options.options.with_acl_support):
++            conf.DEFINE('HAVE_CAFS', '1')
++        else:
++            Logs.error('''cafs support disabled due to --without-acl-support
++                      or lack of libarpc.so libfsmsg.so libnuma.so support''')
++            conf.undefine('HAVE_CAFS')
++            sys.exit(1)
+ 
+     if (Options.options.with_cephfs and
+         conf.CHECK_HEADERS('cephfs/libcephfs.h', False, False, 'cephfs') and
+@@ -1967,6 +1990,9 @@
+         # if we're building with libcephfs for now.
+         default_shared_modules.extend(TO_LIST('vfs_ceph_snapshots'))
+ 
++    if conf.CONFIG_SET("HAVE_CAFS"):
++        default_shared_modules.extend(TO_LIST('vfs_cafs'))
++
+     if conf.CONFIG_SET('HAVE_GLUSTERFS'):
+         default_shared_modules.extend(TO_LIST('vfs_glusterfs'))
+ 

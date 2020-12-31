@@ -1,0 +1,26 @@
+--- samba-4.12.6/source3/modules/wscript_build	2020-05-19 18:10:40.000000000 +0800
++++ wscript_build	2020-10-13 03:20:15.247296702 +0800
+@@ -15,7 +15,7 @@
+ 
+ bld.SAMBA3_SUBSYSTEM('POSIXACL_XATTR',
+                  source='posixacl_xattr.c',
+-                 enabled=(bld.SAMBA3_IS_ENABLED_MODULE('vfs_ceph') or bld.SAMBA3_IS_ENABLED_MODULE('vfs_glusterfs')),
++                 enabled=(bld.SAMBA3_IS_ENABLED_MODULE('vfs_ceph') or bld.SAMBA3_IS_ENABLED_MODULE('vfs_glusterfs') or bld.SAMBA3_IS_ENABLED_MODULE('vfs_cafs')),
+                  deps='acl attr')
+ 
+ bld.SAMBA3_SUBSYSTEM('non_posix_acls',
+@@ -534,6 +534,14 @@
+                  cflags=bld.CONFIG_GET('CFLAGS_CEPHFS'),
+                  includes=bld.CONFIG_GET('CPPPATH_CEPHFS'))
+ 
++bld.SAMBA3_MODULE('vfs_cafs',
++                 subsystem='vfs',
++                 source='vfs_cafs.c',
++                 deps='POSIXACL_XATTR samba-util numa arpc fsmsg cafs',
++                 init_function='',
++                 internal_module=bld.SAMBA3_IS_STATIC_MODULE('vfs_cafs'),
++                 enabled=bld.SAMBA3_IS_ENABLED_MODULE('vfs_cafs'))
++
+ bld.SAMBA3_MODULE('vfs_ceph_snapshots',
+                  subsystem='vfs',
+                  source='vfs_ceph_snapshots.c',

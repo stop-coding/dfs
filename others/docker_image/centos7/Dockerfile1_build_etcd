@@ -1,0 +1,15 @@
+FROM ca_build:v0.0.7
+
+# 安装编译cafs所依赖的非标准库，需要从本地拷贝
+
+WORKDIR /tmp/build
+COPY ./etcd /tmp/build
+
+ENV export PKG_CONFIG_PATH="/usr/lib64/pkgconfig/:/usr/local/lib/pkgconfig/:/usr/local/lib64/pkgconfig"
+ENV export PATH=/opt/rh/devtoolset-7/root/usr/bin:/usr/lib64/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/opt/ibutils/bin:/opt/go/bin:/root/bin:/usr/local/git/bin
+RUN source scl_source enable devtoolset-8 &&\
+	chmod +x ./autobuild.sh &&\
+	./autobuild.sh /tmp/build/ &&\
+	rm -rf /tmp/build
+
+

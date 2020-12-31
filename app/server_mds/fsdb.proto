@@ -1,0 +1,46 @@
+/*
+ * Copyright(C) 2020 Ruijie Network. All rights reserved.
+ */
+
+/*!
+* \file 
+* \brief 
+* 
+* 	该文件是protoc工具生成对应代码所用的格式文档，非直接代码文件
+*
+* \copyright 2020 Ruijie Network. All rights reserved.
+* \author hongchunhua@ruijie.com.cn
+* \version v1.0.0
+* \date 2020.08.05
+* \note none 
+*/
+syntax = "proto3";							 //必须使用proto3版本
+
+import "common.proto";
+
+/**
+ * @brief 请求消息的公共头
+ *
+ * @details
+ */
+message  superblock      
+{
+	uint32 fsid 			= 1;       	// 文件系统ID
+	string fsroot 			= 2;       	// 文件系统根路径
+	uint64 inode_num		= 3;		// innode数量
+	uint64 fssize			= 4;		// 文件系统容量
+	uint32 fsused			= 5;	    // 已使用空间
+	uint64 ino				= 6;		// inode id，可选，可为0.如果是已经缓存了inode id，则可以携带，方便后端快速查找
+}
+
+message  inode      
+{
+	uint32 fsid 			= 1;       	// 文件系统ID
+	uint64 gid 				= 2;       	// 用户组id
+	uint64 client_id		= 3;		// 客户端的唯一识别码，与物理地址相关
+	uint32 num_retry		= 4;		// 表示当前请求client重试次数,一般默认为0
+	uint32 flag				= 5;	    // 标识字段，预留
+	uint64 ino				= 6;		// inode id，可选，可为0.如果是已经缓存了inode id，则可以携带，方便后端快速查找	
+	string root_path		= 7;		// root_path + file_path = MDS绝对路径
+	string file_path		= 8;		// 文件路径(目录或者文件)，必填，用于文件操作入参
+}

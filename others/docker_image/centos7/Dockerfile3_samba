@@ -1,0 +1,18 @@
+FROM cafs_build:v0.0.3
+
+WORKDIR /tmp/build
+COPY ./src /tmp/build
+COPY ./src/run_samba.sh /home/run_samba.sh
+
+#1 编译samba
+WORKDIR /tmp/build
+ENV export PKG_CONFIG_PATH="/usr/lib64/pkgconfig/:/usr/local/lib/pkgconfig/:/usr/local/lib64/pkgconfig"
+RUN chmod +x build_samba.sh &&\
+	mkdir /tmp/build/samba &&\
+	mv /tmp/build/samba.tar.gz /tmp/build/samba &&\
+	mv /tmp/build/smb.conf /tmp/build/samba &&\
+	mv /tmp/build/set_samba_pwd.sh /tmp/build/samba &&\
+	/tmp/build/build_samba.sh /tmp/build/samba
+
+WORKDIR /home
+

@@ -1,0 +1,15 @@
+FROM ca_build:v0.0.7
+
+WORKDIR /tmp/build
+COPY ./src /tmp/build
+
+#0 编译cafs
+RUN chmod +x build_cafs.sh &&\
+	mkdir /tmp/build/cafs &&\
+	mv /tmp/build/ca.tar.gz /tmp/build/cafs &&\
+	/tmp/build/build_cafs.sh /tmp/build/cafs &&\
+	rm -rf /tmp/build &&\
+	mkdir /home/obj_file
+
+WORKDIR /home
+ENTRYPOINT ["/usr/local/bin/server_pfile", "0.0.0.0", "16000"]
