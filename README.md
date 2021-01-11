@@ -1,25 +1,32 @@
+DFS 
+    dfs是一个基于大部分C代码的文件系统，设计架构生支持分布式横向拓展。
 ---
-#                    build
-*【说明】编译工程采用cmake编译
 
-* for linux (centos)
-* apt-get install cmake
+### depnedency
 
-1. cd code root;
-2. mkdir build
-3. cd build
-4. cmake ../    (default:debug mode)
-5. make -j
-6. make install
+* cmake3
+* gcc7
+* protobuf3
+* rocksdb
+* jsoncpp
+* etcd-cpp-apiv3
+* klib
+
+#### [for centos]
+
+* yum install cmake -y
+to add
+
+#### [for ubuntu]
+
+* to add
 
 ---
-#                    file tree
+###                    目录说明
 * app(主程序应用)
-
-* lib(第三方库)
-
-* third_party (开源代码)
-
-* src (ca 源码)
-
+* cafs 文件系统对外api
+* config 默认配置文件
+* etcd_client etcd客户端组件
+* third_party (第三方开源代码)
+* src (主代码)
 * other (工程依赖文件)
